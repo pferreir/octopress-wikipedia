@@ -18,4 +18,4 @@ Option parameters, such as `{% wikipedia Justin Bieber lang:pt %}` can be used.
 
 ## Allowed options
 
- * `lang` - Wikipedia language (i.e. `it` will uses `it.wikipedia.org`) - default is `en`;
+ * `lang` - Wikipedia language (i.e. `it` will use `it.wikipedia.org`) - default is `en`;
