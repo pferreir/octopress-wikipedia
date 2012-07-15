@@ -2,9 +2,22 @@ require 'json'
 require 'nokogiri'
 
 
+def unquoted_string(text)
+  if text =~ Liquid::QuotedString
+    return $1
+  elsif ['true', 'false'].index(text)
+    return text == 'true'
+  elsif text =~ /^[-+]?[0-9]+$/
+    text.to_i
+  else
+    text
+  end
+end
+
+
 module Jekyll
   class WikipediaTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedString})(?:\s(\s*#{Liquid::TagAttributes}\s*)(,\s*#{Liquid::TagAttributes}\s*)*)?/o
+    Syntax = /^\s*([\w\s]*?\w)(?:\s(\s*#{Liquid::TagAttributes}\s*)(,\s*#{Liquid::TagAttributes}\s*)*)?\s*$/o
 
     def initialize(tag_name, markup, token)
       super
@@ -12,7 +25,7 @@ module Jekyll
       if markup =~ Syntax
         @text = $1.strip
         markup.scan(Liquid::TagAttributes) do |key, value|
-          @attributes[key.to_sym] = eval(value)
+          @attributes[key.to_sym] = unquoted_string(value)
         end
       end
       @cache_disabled = false
@@ -21,8 +34,7 @@ module Jekyll
     end
 
     def render(context)
-      var = eval(@text)
-      data = get_cached_article(var) || get_article_from_web(var)
+      data = get_cached_article(@text) || get_article_from_web(@text)
       html_output_for data
     end
 
