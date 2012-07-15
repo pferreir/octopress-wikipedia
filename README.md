@@ -12,9 +12,9 @@ This plugin adds a `{% wikipedia %}` tag that includes small boxes in your pages
 
     # My favorite singer:
 
-    {% wikipedia "Justin Bieber" %}
+    {% wikipedia Justin Bieber %}
 
-Option parameters, such as `{% wikipedia "Justin Bieber" lang: 'pt' %}` can be used.
+Option parameters, such as `{% wikipedia Justin Bieber lang:pt %}` can be used.
 
 ## Allowed options
 
