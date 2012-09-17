@@ -4,7 +4,7 @@ require 'nokogiri'
 
 def unquoted_string(text)
   if text =~ Liquid::QuotedString
-    return $1
+    return text.strip[1..-2]
   elsif ['true', 'false'].index(text)
     return text == 'true'
   elsif text =~ /^[-+]?[0-9]+$/
@@ -17,13 +17,13 @@ end
 
 module Jekyll
   class WikipediaTag < Liquid::Tag
-    Syntax = /^\s*([\w\s]*?\w)(?:\s(\s*#{Liquid::TagAttributes}\s*)(,\s*#{Liquid::TagAttributes}\s*)*)?\s*$/o
+    Syntax = /^\s*([\w\'\"\s]*?[\w\'\"])(?:\s(\s*#{Liquid::TagAttributes}\s*)(,\s*#{Liquid::TagAttributes}\s*)*)?\s*$/o
 
     def initialize(tag_name, markup, token)
       super
       @attributes = { :lang => "en"}
       if markup =~ Syntax
-        @text = $1.strip
+        @text = unquoted_string $1.strip
         markup.scan(Liquid::TagAttributes) do |key, value|
           @attributes[key.to_sym] = unquoted_string(value)
         end
