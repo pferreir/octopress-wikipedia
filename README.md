@@ -6,6 +6,7 @@ This plugin adds a `{% wikipedia %}` tag that includes small boxes in your pages
 
  * Move `wikipedia.rb` and `wikipedia.html` into the `plugins` folder at the root of your octopress repo;
  * Move `_wikipedia.scss` into your theme's `sass/custom` dir (e.g. `.themes/custom/sass/custom`);
+ * Move `w.png` into your theme's `source/images` dir;
  * Add `@import "_wikipedia.scss"` at the end of your `sass/custom/_styles.scss` files;
 
 # Usage

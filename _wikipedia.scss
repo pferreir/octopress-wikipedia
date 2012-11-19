@@ -1,14 +1,18 @@
 .wikipedia {
-
+  font-size: 0.8em;
+  font-family: $serif;
+  padding: 5px 20px 5px 20px;
   background: inline-image('w.png') no-repeat #eee;
-  background-position: 15px 5px;
+  background-position: right bottom;
   clear: both;
-  border-radius: 10px;
-  padding: 5px 5px 5px 20px;
   overflow: auto;
   border: 1px solid #ddd;
   margin-bottom: 15px;
   color: #333;
+
+  p {
+    text-align:justify;
+  }
 
   img {
     float: right;
@@ -18,7 +22,10 @@
   }
 
   h2 {
-    margin-left: 80px;
+    font-family: $serif;
+    color: #777;
+    text-transform: none;
+    font-size: 2.0em;
     background: none;
   }
 
