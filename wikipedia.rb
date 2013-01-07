@@ -80,9 +80,7 @@ module Jekyll
       html = ""
       pages = JSON.parse(data)['query']['pages']
 
-      pages.each do |page_no, page|
-        html = page['revisions'][0]['*']
-      end
+      pages.each { |_, page| html = page['revisions'][0]['*'] }
 
       doc = Nokogiri::HTML::DocumentFragment.parse html
       data = extract_metadata doc, name
