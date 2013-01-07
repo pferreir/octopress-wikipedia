@@ -1,7 +1,6 @@
 require 'json'
 require 'nokogiri'
 
-
 def unquoted_string(text)
   if text =~ Liquid::QuotedString
     return text.strip[1..-2]
@@ -14,7 +13,6 @@ def unquoted_string(text)
   end
 end
 
-
 module Jekyll
   class WikipediaTag < Liquid::Tag
     Syntax = /^\s*([\w\'\"\s]*?[\w\'\"])(?:\s(\s*#{Liquid::TagAttributes}\s*)(,\s*#{Liquid::TagAttributes}\s*)*)?\s*$/o
@@ -22,20 +20,22 @@ module Jekyll
     def initialize(tag_name, markup, token)
       super
       @attributes = { :lang => "en"}
+
       if markup =~ Syntax
         @text = unquoted_string $1.strip
+
         markup.scan(Liquid::TagAttributes) do |key, value|
           @attributes[key.to_sym] = unquoted_string(value)
         end
       end
+
       @cache_disabled = false
       @cache_folder   = File.expand_path "../.wikipedia-cache", File.dirname(__FILE__)
       FileUtils.mkdir_p @cache_folder
     end
 
     def render(context)
-      data = get_cached_article(@text) || get_article_from_web(@text)
-      html_output_for data
+      html_output_for(get_cached_article(@text) || get_article_from_web(@text))
     end
 
     def wiki_url()
@@ -79,11 +79,10 @@ module Jekyll
 
       html = ""
       pages = JSON.parse(data)['query']['pages']
-      pages.each do |page_no, page|
-        html = page['revisions'][0]['*']
-      end
-      doc = Nokogiri::HTML::DocumentFragment.parse html
 
+      pages.each { |_, page| html = page['revisions'][0]['*'] }
+
+      doc = Nokogiri::HTML::DocumentFragment.parse html
       data = extract_metadata doc, name
 
       cache name, data unless @cache_disabled
@@ -93,32 +92,34 @@ module Jekyll
     def cleanup(doc)
       description = doc.xpath("./p")[0]
       ['.unicode', '.reference', '.noprint', 'img[alt=play]'].each do |cls|
-        description.css(cls).each do |node|
-          node.replace(' ')
-        end
+        description.css(cls).each { |node| node.replace(' ') }
       end
+
       description.css('b').each do |node|
         node.replace("<strong>%s</strong>" % node.content.to_html)
       end
+
       description.css('.IPA').each do |node|
         node.content = node.text
       end
+
       description.css('a').each do |node|
-        if /^\/wiki\//.match(node['href'])
-          node['href'] = wiki_url + node['href']
-        end
+        node['href'] = wiki_url + node['href'] if /^\/wiki\//.match(node['href'])
       end
+
       description
     end
 
     def get_cached_article(article)
       return nil if @cache_disabled
+
       cache_file = get_cache_file_for article, @attributes[:lang]
       JSON.parse(File.read cache_file) if File.exist? cache_file
     end
 
     def cache(article, data)
       cache_file = get_cache_file_for article, @attributes[:lang]
+
       File.open(cache_file, "w") do |io|
         io.write JSON.generate data
       end
@@ -128,6 +129,7 @@ module Jekyll
       bad_chars = /[^a-zA-Z0-9\-_.]/
       article   = article.gsub bad_chars, ''
       md5       = Digest::MD5.hexdigest "#{article}"
+
       File.join @cache_folder, "#{article}.#{lang}.cache"
     end
   end
