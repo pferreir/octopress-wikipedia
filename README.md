@@ -9,6 +9,7 @@ This plugin adds a `{% wikipedia %}` tag that includes small boxes in your pages
  * Move `_wikipedia.scss` into your theme's `sass/custom` dir (e.g. `.themes/custom/sass/custom`);
  * Move `w.png` into your theme's `source/images` dir;
  * Add `@import "_wikipedia.scss"` at the end of your `sass/custom/_styles.scss` files;
+ * Add `gem 'nokogiri', '~> 1.6.1'` to `Gemfile` (depends on the current nokogiri version)
 
 # Usage
 
