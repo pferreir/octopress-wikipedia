@@ -1,6 +1,6 @@
 # Introduction
 
-This plugin adds a `{% wikipedia %}` tag that includes small boxes in your pages, containing Wikipedia article summaries. Here is [an example](http://pferreir.github.com/2012/06/19/medieval-mysteries/).
+This plugin adds a `{% wikipedia %}` tag that includes small boxes in your pages, containing Wikipedia article summaries. Here is [an example](http://pferreir.github.io/blog/2012/06/19/medieval-mysteries/).
 
 # Installation
 
